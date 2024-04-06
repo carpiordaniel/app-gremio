@@ -1,0 +1,4 @@
+.titulo-documentos{
+  grid-column: 1/-1;
+  font-weight: 600;
+}
