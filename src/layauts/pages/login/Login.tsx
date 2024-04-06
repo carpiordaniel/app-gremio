@@ -7,130 +7,95 @@ import { useNavigate } from "react-router-dom";
 
 
 export const Login = () => {
-
   const navigate = useNavigate();
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [formData, setFormData] = useState({
-    
-      "email": "x@gmail.com",
-      "password":"12345"
-  
-    // perfil: '',
-  });
-
-  console.log(loggedIn)
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  //const [loggedIn, setLoggedIn] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Aquí puedes agregar la lógica para validar las credenciales y manejar el inicio de sesión
-    console.log('Datos de inicio de sesión:', formData);
+    console.log('Datos de inicio de sesión:', { email, password });
     try {
       const response = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({ email, password })
       });
-
-      if (response.ok) {
-        const data = await response.json();
-
+      const data = await response.json();
+      console.log("dataaaaa",data)
+      console.log(response)
+      if (data.respuesta) {
+        //const data = await response.json();
         localStorage.setItem("token", data.resultado.token);
-        console.log("hay que hacer el nav")
-        setLoggedIn(true);
-        if(data.resultado.token){ 
-          navigate("/gr", {replace: true}); 
-          //window.location.reload();
-        }
-        console.log(data)
-        
+        console.log("Inició sesión correctamente");
+        //setLoggedIn(true);
+        navigate("/", { replace: true }); 
+        window.location.reload();
+        // Navegar a la página principal
       } else {
-        // Si la respuesta no es exitosa, manejar el error
-        console.error('Error al iniciar sesión');
+        if(data.mensaje == 'Password incorrecta' || data.mensaje == 'El usuario no existe en el sistema'){	
+          setError("Credenciales incorrectas");
+          console.log("", data.mensaje);
+          return;
+        }
+        alert(data.mensaje);	
       }
     } catch (error) {
       console.error('Error al realizar la petición:', error);
     }
-
   };
-
-  
-
 
   useEffect(() => {
     const container = document.querySelector('.main-app');
     if (container) {
       container.classList.add("form-in");
     }
-  }, [])
-
-
+  }, []);
 
   return (
     <div className="container-login" id="login">
-
-    <div className="contenido">
-      <div className="imagen">
-        <img src="src\assets\login.png" alt="login img"/>
-      </div>
-      <div className="login-container">
-        <h2>Iniciar Sesión</h2>
-        <form className="login" onSubmit={handleSubmit}>
-          <div className="">
-            
-            <input 
-              className="email" 
-              type="text" 
-              id="email" 
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Email" />
-          </div>
-          <div className="">
-
-            <input 
-              type="password" 
-              id="password" 
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Contraseña" />
-          </div>
-          {/* <div className="">
-            <select 
-              name=""
-              // value={formData.email}
-              onChange={handleChange} 
-              id="">
-              <option >Selecciona perfil...</option>
-              <option value="1">Presidente</option>
-              <option value="2">Secretaria gremio</option>
-              <option value="3">Secretaria general</option>
-            </select>
-          </div> */}
-        
-          <button type="submit" >Iniciar Sesión</button>
-        </form>
+      <div className="contenido">
+        <div className="imagen">
+          <img src="sftp://217.196.50.138/var/www/html/img/login.png" alt="login img"/>
+        </div>
+        <div className="login-container">
+          <h2>Iniciar Sesión</h2>
+          <form className="login" onSubmit={handleSubmit}>
+            <div className="">
+              <input 
+                className="email" 
+                type="text" 
+                id="email" 
+                name="email"
+                required
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="Email" />
+            </div>
+            <div className="">
+              <input 
+                type="password" 
+                id="password" 
+                name="password"
+                required
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                placeholder="Contraseña" />
+            </div>
+            {/* Mostrar mensaje de error si hay uno */}
+            {error && <p className="error-message">{error}</p>}
+            <button type="submit">Iniciar Sesión</button>
+          </form>
+        </div>
       </div>
     </div>
-
-   
-    </div>
-
+  );
+};
 
 
 
 
 
-
-  )
-}

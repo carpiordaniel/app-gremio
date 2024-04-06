@@ -72,3 +72,11 @@ button:disabled {
 .container-login .contenido .login-container form select{
   padding: 0 20px;
 }
+
+
+form p.error-message{
+  color: #ff8080;
+  padding-left: 10px;
+  font-weight: 600;
+  font-size: 14px;
+}

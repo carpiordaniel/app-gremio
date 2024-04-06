@@ -4,7 +4,7 @@ import './menu.css'
 export const Menu = () => {
   const currentPath = useLocation().pathname;
 
-  if (currentPath === '/') {
+  if (currentPath.startsWith('/login')) {
     return null; // No renderiza el menú si estamos en la página de inicio de sesión
   }
   return (
@@ -13,7 +13,7 @@ export const Menu = () => {
     <div className="menu-container">
       <p className="facturacion">Gremios</p>
       <ul>
-          <li><Link to="/gr"  > 📁 Registros </Link></li>
+          <li><Link to="/"  > 📁 Registros </Link></li>
           <li><Link to="/gr/gremios" > 🗃️ Gremios </Link></li>
           <li> <Link to="/gr/validar-registros" >✅ Validar registros</Link></li>
           <li><Link to="/gr/comprobantes" >📋 Comprobantes </Link></li>
@@ -33,7 +33,7 @@ export const Menu = () => {
       </ul>
     </div>
 
-    <Link to={"/"} className="salir" >✖️ Salir</Link> 
+    <Link to={"/login"} className="salir" >✖️ Salir</Link> 
     
     </div>
 

@@ -32,8 +32,8 @@ function App() {
         <Menu />
         <div className="contenedor-app">
           <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/gr" element={<Registros />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Registros />} />
             <Route path="/gr/gremios" element={<Gremios />} />
             <Route path="/gr/validar-registros" element={<ValidarRegistros />} />
             <Route path="/gr/comprobantes" element={<Comprobantes />} />
