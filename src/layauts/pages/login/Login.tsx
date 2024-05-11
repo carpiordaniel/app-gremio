@@ -37,7 +37,7 @@ export const Login = () => {
     <div className="container-login" id="login">
       <div className="contenido">
         <div className="imagen">
-          <img src="./../../../../src/assets/login.png" alt="login img"/>
+          <img src="https://raw.githubusercontent.com/carpiordaniel/app-gremio-unir/master/src/assets/login.png" alt="login img"/>
         </div>
         <div className="login-container">
           <h2>Iniciar Sesión</h2>
