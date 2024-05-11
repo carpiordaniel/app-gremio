@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
-import { GremioRepository } from "../../../../data/parametros/gremio/gremioRepository";
-import { GremioModel } from "../../../../domain/parametros/gremio/models/gremioModel";
 import { ITEM_PER_PAGE } from "../../../../core/urls/gremioUrl";
 import Pagination from "../../../../componets/pagination/Pagination";
 
 export const Gremio: React.FC = () => {
-  const gremioRepository = new GremioRepository();
-  const [gremio, setGremio] = useState<GremioModel[]>([]);
+
+  const [gremio, setGremio] = useState([ { codigoCatalogo: 0, nombre: '', descripcion: '', idTipoParametroResp: '', fechaCreacion: '', fechaActualizacion: '' } ]);
   const [pageNumber, setPageNumber] = useState(0);
   const itemsPerPage = ITEM_PER_PAGE; 
   const pagesVisited = pageNumber * itemsPerPage;
@@ -14,7 +12,7 @@ export const Gremio: React.FC = () => {
   const [nombre, setNombre] = useState('');
   const [descripcion, setDescripcion] = useState('');
   const [estado, setEstado] = useState('true');
-  const [tipoParametro] = useState('GREMIO');
+
 
 
   useEffect(() => {
@@ -22,12 +20,12 @@ export const Gremio: React.FC = () => {
   }, []);
 
   const getAllGremio = () => {
-    gremioRepository.getAllGremio().then((res) => {
-      if (res) {
-        setGremio(res);
-      }
-    });
+    setGremio([{ codigoCatalogo: 1, nombre: 'Gremios', descripcion: 'Gremio', idTipoParametroResp: 'gremios', fechaCreacion: '2022-01-01', fechaActualizacion: '2022-01-01' }]);
   };
+  
+  const deleteGremio = () => {
+    
+  }
 
   const tablaFinal = gremio
     .slice(pagesVisited, pagesVisited + itemsPerPage)
@@ -36,12 +34,11 @@ export const Gremio: React.FC = () => {
         <td>{item.codigoCatalogo}</td>
         <td>{item.nombre}</td>
         <td>{item.descripcion}</td>
-        {/* <td>{item.estadoRegistro}</td> */}
-        <td>{item.idTipoParametro}</td>
+        <td>{item.idTipoParametroResp}</td>
         <td>{item.fechaCreacion.substring(0, 10)}</td>
         <td>{item.fechaActualizacion.substring(0, 10)}</td>
         <td className="eliminar">
-        <button>❌</button>
+        <button onClick={() => deleteGremio()}>❌</button>
         </td>
       </tr>
     ));
@@ -56,23 +53,7 @@ export const Gremio: React.FC = () => {
 
 
   const handleSubmit = async ( event : React.FormEvent ) => {
-    event.preventDefault(); // Evita que el formulario se envíe de forma predeterminada
-
-    const gremio = {
-      nombre: nombre,
-      descripcion: descripcion,
-      estado: estado,
-      tipoParametro: tipoParametro
-    };
-
-    const exito = await gremioRepository.RegistrarCatalogo(gremio);
-
-    if (exito) {
-      alert('El gremio se ha registrado correctamente.');
-      getAllGremio();
-    } else {
-      alert('Error al registrar el gremio.');
-    }
+    event.preventDefault(); 
   };
 
 

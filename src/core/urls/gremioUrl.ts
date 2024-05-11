@@ -1,4 +1,4 @@
-export const API_URL = "http://217.196.50.138:8081/gremios-microservices/api";
+// export const IP = "localhost:5173"
 export const ITEM_PER_PAGE = 5; 
 
 
@@ -6,7 +6,8 @@ export const ITEM_PER_PAGE = 5;
 
 
 
-export const TOKEN = localStorage.getItem('token');
+
+
 
 
 

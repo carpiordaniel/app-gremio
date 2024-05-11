@@ -1,0 +1,61 @@
+div.container-val-registro{
+  position: relative;
+}
+div.container-val-registro section span{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 10000;
+  background-color: #ffffff;
+  border-radius: 100%;
+}
+
+div.pdf{
+  position: absolute;
+  background-color: #f8f8f8;
+  padding: 30px 100px;
+  width: 100%;
+  height: calc(100vh - 80px); 
+}
+
+main .tabs button{
+  background-color: rgb(255, 255, 255);
+  height: 40px;
+  width: auto;
+  padding: 5px 15px;
+  margin: 5px 1px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  border-radius: 2px;
+}
+main .tabs button.active{
+  background-color: #e8eeff;
+  border: none;
+  border-bottom: 3px solid #6f93ff;
+  
+}
+main,
+main .tab-content iframe{
+  width: 100%;
+  height: 100%;
+}
+
+main .tab-content{
+  width: 100%;
+  height: calc(100vh - 200px);
+}
+
+.estado-comprobante{
+  width: 100px;
+  border-radius: 100px;
+  padding: "2px 5px";
+  font-weight: 600;
+}
+
+
+
+
+

@@ -1,16 +1,14 @@
-import React from 'react'
-
 import { useEffect, useState } from "react";
-import { GremioModel } from "../../../../domain/parametros/gremio/models/gremioModel";
 import { ITEM_PER_PAGE } from "../../../../core/urls/gremioUrl";
 import Pagination from "../../../../componets/pagination/Pagination";
-import { DeporteRepository } from '../../../../data/parametros/deporte/deporteRepository';
+
 
 
 export const Deporte = () => {
-
-  const deporteRepository = new DeporteRepository();
-  const [gremio, setGremio] = useState<GremioModel[]>([]);
+  
+  
+ 
+  const [deportes, setDeportes] = useState([ { codigoCatalogo: 0, nombre: '', descripcion: '', idTipoParametroResp: '', fechaCreacion: '', fechaActualizacion: '' } ]);
   const [pageNumber, setPageNumber] = useState(0);
   const itemsPerPage = ITEM_PER_PAGE; 
   const pagesVisited = pageNumber * itemsPerPage;
@@ -18,7 +16,7 @@ export const Deporte = () => {
   const [nombre, setNombre] = useState('');
   const [descripcion, setDescripcion] = useState('');
   const [estado, setEstado] = useState('true');
-  const [tipoParametro] = useState('DEPORTE');
+  
 
 
   useEffect(() => {
@@ -26,14 +24,15 @@ export const Deporte = () => {
   }, []);
 
   const getAllDeporte = () => {
-    deporteRepository.getAllDeporte().then((res) => {
-      if (res) {
-        setGremio(res);
-      }
-    });
+    setDeportes([{ codigoCatalogo: 1, nombre: 'Deportes', descripcion: 'Deporte', idTipoParametroResp: 'deportes', fechaCreacion: '2022-01-01', fechaActualizacion: '2022-01-01' }]);
   };
 
-  const tablaFinal = gremio
+  const deleteGremio = () => {
+    
+  }
+
+
+  const tablaFinal = deportes
     .slice(pagesVisited, pagesVisited + itemsPerPage)
     .map((item) => (
       <tr key={item.codigoCatalogo}>
@@ -41,16 +40,16 @@ export const Deporte = () => {
         <td>{item.nombre}</td>
         <td>{item.descripcion}</td>
         {/* <td>{item.estadoRegistro}</td> */}
-        <td>{item.idTipoParametro}</td>
+        <td>{item.idTipoParametroResp}</td>
         <td>{item.fechaCreacion.substring(0, 10)}</td>
         <td>{item.fechaActualizacion.substring(0, 10)}</td>
         <td className="eliminar">
-        <button>❌</button>
+        <button onClick={() => deleteGremio()}>❌</button>
         </td>
       </tr>
     ));
 
-  const pageCount = Math.ceil(gremio.length / itemsPerPage);
+  const pageCount = Math.ceil(deportes.length / itemsPerPage);
   const changePage = ({ selected }: { selected: number }) => {
     setPageNumber(selected);
   };
@@ -60,23 +59,7 @@ export const Deporte = () => {
 
 
   const handleSubmit = async ( event : React.FormEvent ) => {
-    event.preventDefault(); // Evita que el formulario se envíe de forma predeterminada
-
-    const gremio = {
-      nombre: nombre,
-      descripcion: descripcion,
-      estado: estado,
-      tipoParametro: tipoParametro
-    };
-
-    const exito = await deporteRepository.RegistrarCatalogo(gremio);
-
-    if (exito) {
-      alert('El gremio se ha registrado correctamente.');
-      getAllDeporte();
-    } else {
-      alert('Error al registrar el gremio.');
-    }
+    event.preventDefault(); 
   };
 
 

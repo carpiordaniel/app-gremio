@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import Pagination from '../../../../componets/pagination/Pagination';
 import { ITEM_PER_PAGE } from '../../../../core/urls/gremioUrl';
-import { PresidenteRepository } from '../../../../data/parametros/presidente/presidenteRepository';
-import { PresidenteModel } from '../../../../domain/parametros/presidente/models/presidenteModel';
 
 export const Presiendente = () => {
-  const presidenteRepository = new PresidenteRepository();
-  const [presidentes, setIdPresidentes] = useState<PresidenteModel[]>([]);
+  
+  const [presidentes, setPresidentes] = useState([ { idUser: 0, nombre: '', username: '', email: '', password: '' } ]);
   const [pageNumber, setPageNumber] = useState(0);
   const itemsPerPage = ITEM_PER_PAGE; 
   const pagesVisited = pageNumber * itemsPerPage;
@@ -23,21 +21,20 @@ export const Presiendente = () => {
   }, []);
 
   const getAllPresidentes = () => {
-    presidenteRepository.getAllPresidentes().then((res) => {
-      if (res) {
-        setIdPresidentes(res);
-      }
-      console.log(res)
-    });
-    console.log(presidentes)
+    setPresidentes([{ idUser: 1, nombre: 'Nombre Presidente', username: 'Username Presidente', email: 'Email Presidente', password: 'Password Presidente' }]);
   };
+
+  const deleteGremio = () => {
+    
+  }
+
 
 
   const changePage = ({ selected }: { selected: number }) => {
     setPageNumber(selected);
   };
 
-console.log(presidentes)
+
   
   const tablaFinal = presidentes
   .slice(pagesVisited, pagesVisited + itemsPerPage)
@@ -45,13 +42,11 @@ console.log(presidentes)
     <tr key={item.idUser}>
       <td>{item.idUser}</td>
       <td>{item.nombre}</td>
-      {/* <td>{item.deporte}</td>
-      <td>{item.gremio}</td>
-      <td>{item.categoria}</td>
-      <td>{item.carrera}</td> */}
+      <td>{item.username}</td>
+      <td>{item.email}</td>
   
       <td className="eliminar">
-      <button>❌</button>
+      <button onClick={() => deleteGremio()}>❌</button>
       </td>
     </tr>
   ));
@@ -59,32 +54,7 @@ console.log(presidentes)
 
   const handleSubmit = async ( event : React.FormEvent ) => {
     event.preventDefault(); 
-    
-    const presidente = {
-      email: email,
-      nombre: nombre,
-      username: username,
-      password: password,
-  
-    };
-
-    if( presidente.email == "" || presidente.nombre == "" || presidente.username == "" 
-    || presidente.password == ""){
-      alert("Todos los campos son obligatorios");
-      return;
-    }
-
-    console.log(presidente)
-    const exito = await presidenteRepository.RegistrarPresidente(presidente);
-    if (exito) {
-      alert('El presidente se ha registrado correctamente.');
-      getAllPresidentes();
-    } else {
-      alert('Error al registrar el presidente.');
-    }
-    
-
-  }
+ }
   return (
     <div>
       <div className="content">
@@ -143,9 +113,6 @@ console.log(presidentes)
               />
             </div>
 
-
-            
-
             <div className="container-inputs">
               <label htmlFor="password">
                 Contraseña<span>(*)</span>
@@ -187,34 +154,16 @@ console.log(presidentes)
                 <tr>
                   <th>ID</th>
                   <th>Nombre</th>
-                  {/* <th>Descripcion</th>
-                  <th>Estado</th>
-                  <th>Fecha Actualizacion</th>
-                  <th>Fecha Creacion</th> */}
+                  <th>Username</th>
+                  <th>Correo</th>
                   <th className="eliminar">Acciones</th>
                 </tr>
               </thead>
 
               <tbody>{tablaFinal}</tbody>
-
-              {/* <tbody>
-                <tr>
-                  <td>codigoCatalogo</td>
-                  <td> nombre </td>
-                  <td> descripcion </td>
-                  <td> estadoRegistro </td>
-                  <td> fechaActualizacion </td>
-                  <td> fechaCreacion </td>
-                  <td className="eliminar">
-                    <button>❌</button>
-                  </td>
-                </tr>
-              </tbody> */}
             </table>
           </div>
-
           <Pagination pageCount={pageCount} onPageChange={changePage} />
-
 
         </div>
       </div>

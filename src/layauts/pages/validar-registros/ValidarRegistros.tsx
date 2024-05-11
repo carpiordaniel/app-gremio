@@ -1,18 +1,17 @@
 import { useEffect, useState } from 'react'
 import Pagination from '../../../componets/pagination/Pagination';
 import { ITEM_PER_PAGE } from '../../../core/urls/gremioUrl';
-import { ValidarRegistrosRepository } from '../../../data/validar-registros/validarRegistrosRepository';
-import { validarRegistroModel } from '../../../domain/validar-registros/models/validarRegistroModel';
+import PopupDocuments from './PopupDocuments';
+import './ValidarRegistros.css'
+import SaveIcon from '@mui/icons-material/Save';
 
 export const ValidarRegistros = () => {
 
-  const validarRegistrosRepository = new ValidarRegistrosRepository();
   const [pageNumber, setPageNumber] = useState(0);
   const itemsPerPage = ITEM_PER_PAGE; 
   const pagesVisited = pageNumber * itemsPerPage;
-
-  const [postulantes, setPostulantes] = useState<validarRegistroModel[]>([]);
-
+  const [showPopup, setShowPopup] = useState(false); 
+  const [postulantes, setPostulantes] = useState([{ idPostulante: 0, nombres: '', apellidos: '', cedula: '', email: '', deporte: '', estadoPostulante: '' } ]);
 
 
   useEffect(() => {
@@ -21,29 +20,49 @@ export const ValidarRegistros = () => {
 
 
   const getAllPostulantes = () => {
-    validarRegistrosRepository.getAllPostulantes().then((res) => {
-      if (res) {
-        setPostulantes(res);
-      }
-      console.log(res)
-    });
-    console.log(postulantes)
+    setPostulantes([{ idPostulante: 1, nombres: 'prueba', apellidos: 'prueba', cedula: 'prueba', email: 'prueba', deporte: 'prueba', estadoPostulante: 'PENDIENTE' }]);
   };
 
+
+  const handleChange = () => {
+    
+  };
+
+  const aprobarComprobante = () => {
+  }
 
   const tablaFinal = postulantes
   .slice(pagesVisited, pagesVisited + itemsPerPage)
   .map((item) => (
-    <tr key={item.email}>
+    <tr key={item.idPostulante}>
+      <td>{item.idPostulante}</td>
       <td>{item.nombres}</td>
       <td>{item.apellidos}</td>
       <td>{item.cedula}</td>
       <td>{item.email}</td>
       <td>{item.deporte}</td>
+      <td><button onClick={ () => verDocumentos()}>🗃️</button></td>
+      {/* <td>{item.estadoPostulante}</td> */}
+      <td>
+      <select 
+        className={`estado-comprobante`}
+        name={item.idPostulante.toString()} 
+        id={item.idPostulante.toString()}
+        value={item.estadoPostulante}
+        onChange={() => handleChange()}
+        >
+          <option value="PENDIENTE">Pendiente</option>
+          <option value="APROBADO">Aprobado</option>
+          <option value="RECHAZADO">Rechazado</option>
+      </select>
      
+      </td>
+
   
       <td className="eliminar">
       <button>❌</button>
+      <SaveIcon onClick={() => aprobarComprobante()} sx={{color: '#747474'}} />
+
       </td>
     </tr>
   ));
@@ -53,13 +72,21 @@ export const ValidarRegistros = () => {
     setPageNumber(selected);
   };
 
+  function verDocumentos() {
+    setShowPopup(true);
+  }
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
+  };
+
+  
   return (
-    <div>
+    <>
     <div className="content">
       <div className="barra-tutilo">
         <p>
-          <b>Importante:</b> para guardar debe ingresar todos los campos
-          obligatorios (*)
+          <b>Importante:</b> dele clic en el botón guardar para aprobar/rechazar (*)
         </p>
       </div>
 
@@ -68,118 +95,16 @@ export const ValidarRegistros = () => {
           <b>Lista de portulantes</b>
         </p>
       </div>
-      <div className="container-form">
-        {/* <form action="" className="login" onSubmit={handleSubmit}>
-          <div className="container-inputs">
-            <label htmlFor="nombreEquipo">
-              Nombre gremio (equipo)<span>(*)</span>{" "}
-            </label>
-            <input
-              className="username"
-              type="text"
-              id="nombreEquipo"
-              placeholder="Nombre gremio (equipo)"
-              value={nombreEquipo}
-              onChange={(e) => setNombreEquipo(e.target.value)}
-              required
-            />
-          </div>
-
-       
-          <div className="container-inputs">
-            <label htmlFor="idPresidente">
-              Presidente <span>(*)</span>{" "}
-            </label>
-            <select 
-              name="idPresidente" 
-            id="idPresidente"
-            value={idPresidente}
-            onChange={(e) => setIdPresidente(parseInt(e.target.value))}
-            required>
-              <option value={0}>Seleccione una opción...</option>
-              <option value="1">Presidente.nombre</option>
-            </select>
-          </div>
-        
-
-          <div className="container-inputs">
-            <label htmlFor="idDeporte">
-              Deportes <span>(*)</span>{" "}
-            </label>
-            <select name="idDeporte" 
-              id="idDeporte"
-              value={idDeporte}
-              onChange={(e) =>setIdDeporte(parseInt(e.target.value))} 
-              required
-              key={idDeporte} >
-                <option value={0}>Seleccione una opción...</option>
-              {deportes.map((deporte) => (
-                <option  value={deporte.codigoCatalogo}>{deporte.nombre}</option>
-              ))}
-
-            </select>
-          </div>
-
-          <div className="container-inputs">
-            <label htmlFor="idGremio">
-              Gremio <span>(*)</span>{" "}
-            </label>
-            <select name="idGremio" 
-              id="idGremio"
-              value={idGremio}
-              onChange={(e) => setIdGremio(parseInt(e.target.value))}
-              required
-              key={idGremio} >
-                <option value={0}>Seleccione una opción...</option>
-              {gremio.map((gremio) => (
-                <option  value={gremio.codigoCatalogo}>{gremio.nombre}</option>
-              ))}
-            </select>
-          </div>
-
-
-          <div className="container-inputs">
-            <label htmlFor="username">
-              Categoría <span>(*)</span>{" "}
-            </label>
-            <select name="idCategoria" 
-              id="idCategoria"
-              value={idCategoria}
-              onChange={(e) => setIdCategoria(parseInt(e.target.value))}
-              required
-              key={idCategoria} >
-                <option value={0}>Seleccione una opción...</option>
-              {categoria.map((categoria) => (
-                <option  value={categoria.codigoCatalogo}>{categoria.nombre}</option>
-              ))}
-            </select>
-          </div>
-
-
-          <div className="container-inputs">
-            <label htmlFor="username">
-              Carrea <span>(*)</span>{" "}
-            </label>
-            <select name="idCarrera" 
-              id="idCarrera"
-              value={idCarrera}
-              onChange={(e) => setIdCarrera(parseInt(e.target.value))}
-              required
-              key={idCarrera} >
-                <option value={0}>Seleccione una opción...</option>
-              {carrera.map((carrera) => (
-                <option  value={carrera.codigoCatalogo}>{carrera.nombre}</option>
-              ))}
-            </select>
-          </div>
-
-
-          <div className="container-button">
-            <button type="submit">Guardar Datos</button>
-          </div>
-        </form> */}
-      </div>
+      
     </div>
+    <div className='container-val-registro'>
+      {showPopup && <section>
+            <span onClick={handleClosePopup}>❌</span>
+            <div className='pdf'>
+            {<PopupDocuments />}
+            </div>
+      </section>}
+
 
     <div className="table-container">
       <div className="buscar">
@@ -192,11 +117,14 @@ export const ValidarRegistros = () => {
           <table>
             <thead>
               <tr>
-                <th>Nombre equipo</th>
-                <th>Presidente</th>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Cedula</th>
+                <th>Emial</th>
                 <th>Deporte</th>
-                <th>Gremio</th>
-                <th>Categoria</th>
+                <th>Docs</th>
+                <th>Estado</th>
                
                 <th className="eliminar">Acciones</th>
               </tr>
@@ -209,6 +137,9 @@ export const ValidarRegistros = () => {
       </div>
     </div>
   </div>
+  </>
 );
   
 }
+
+

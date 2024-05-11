@@ -1,11 +1,31 @@
 import { Link, useLocation  } from "react-router-dom";
 import './menu.css'
-
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import LogoutIcon from '@mui/icons-material/Logout';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { useEffect, useState } from "react";
+export interface dataResponse {
+  email: string,
+  nombre: string,
+  rol: string,
+  userName: string 
+}
 export const Menu = () => {
   const currentPath = useLocation().pathname;
+  const [data, setData] = useState<dataResponse>({} as dataResponse);
+  useEffect(() => {
+    setData(JSON.parse(localStorage.getItem('data') || '{}'))
+    
+  }, []);
 
-  if (currentPath.startsWith('/login')) {
-    return null; // No renderiza el menú si estamos en la página de inicio de sesión
+  if (currentPath === '/login') {
+    return null; 
+  }
+
+  const logout = () => {
+    localStorage.removeItem('data');
+    window.location.href = '/login';
   }
   return (
     
@@ -16,11 +36,23 @@ export const Menu = () => {
           <li><Link to="/"  > 📁 Registros </Link></li>
           <li><Link to="/gr/gremios" > 🗃️ Gremios </Link></li>
           <li> <Link to="/gr/validar-registros" >✅ Validar registros</Link></li>
-          <li><Link to="/gr/comprobantes" >📋 Comprobantes </Link></li>
+          {/* <li><Link to="/gr/comprobantes" >📋 Comprobantes </Link></li> */}
 
           <div id="summary">
             <details >
-              <summary >Parametros <span className="abajo">🡫</span> <span className="derecha">🡪</span> </summary>
+              <summary ><span className="abajo"><KeyboardArrowDownIcon/> </span> Comprobantes <span className="derecha"><ChevronRightIcon/></span> </summary>
+              <ul>
+                <li><Link to="/gr/comprobantes/subir"> Subir Comprobante</Link></li>
+                <li><Link to="/gr/comprobantes/validar">Valida commprobante</Link></li>
+                
+              </ul>
+            </details>
+          </div>
+          
+
+          <div id="summary">
+            <details >
+              <summary ><span className="abajo"><KeyboardArrowDownIcon/> </span> Parametros  <span className="derecha"><ChevronRightIcon/></span> </summary>
               <ul>
                 <li><Link to="/gr/param/gremio"> Gremio</Link></li>
                 <li><Link to="/gr/param/categoria">Categoría</Link></li>
@@ -30,10 +62,31 @@ export const Menu = () => {
               </ul>
             </details>
           </div>
+
+
       </ul>
     </div>
 
-    <Link to={"/login"} className="salir" >✖️ Salir</Link> 
+
+    <div>
+      <div className="profile">
+        <div className="profile-container">
+        <hr />
+        <p> PERFIL </p>
+        <hr/>
+        </div>
+        <div className="profile-data">
+
+        <AccountCircleIcon/>
+        <div>
+          <p > {data?.nombre ? data?.nombre.toLocaleUpperCase(): ''}</p>
+          <p > {data?.rol ? data?.rol: ''}</p>
+          </div>
+        </div>
+      </div>
+      <button className="salir"  onClick={logout}><LogoutIcon/> Salir</button> 
+
+    </div>
     
     </div>
 

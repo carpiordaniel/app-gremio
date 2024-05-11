@@ -1,21 +1,11 @@
 import { useEffect, useState } from "react";
 import { ITEM_PER_PAGE } from "../../../core/urls/gremioUrl";
 import Pagination from "../../../componets/pagination/Pagination";
-import { GremiosRepository } from "../../../data/gremios/gremiosRepository";
-import { GremiosModel } from "../../../domain/gremios/models/gremiosModel";
-import { GremioModel } from "../../../domain/parametros/gremio/models/gremioModel";
-import { CategoriaRepository } from "../../../data/parametros/categoria/categoriaRepository";
-import { DeporteRepository } from "../../../data/parametros/deporte/deporteRepository";
-import { GremioRepository } from "../../../data/parametros/gremio/gremioRepository";
-import { CarreraRepository } from "../../../data/parametros/carrera/carreraRepository";
-import { PresidenteRepository } from "../../../data/parametros/presidente/presidenteRepository";
-import { PresidenteModel } from "../../../domain/parametros/presidente/models/presidenteModel";
+
 
 export const Gremios = () => {
-
-  const gremiosRepository = new GremiosRepository();
   
-  const [gremios, setGremios] = useState<GremiosModel[]>([]);
+  const [gremios, setGremios] = useState([{ id: 0, nombreEquipo: '', presidente: "", deporte: "", gremio: "", categoria: "", carrera: "" }]);
   const [pageNumber, setPageNumber] = useState(0);
   const itemsPerPage = ITEM_PER_PAGE; 
   const pagesVisited = pageNumber * itemsPerPage;
@@ -28,16 +18,11 @@ export const Gremios = () => {
   const [idCarrera, setIdCarrera] = useState(0);
 
 
-  const deportesRepository = new DeporteRepository();
-  const [deportes, setDeporte] = useState<GremioModel[]>([]);
-  const gremioRepository = new GremioRepository();
-  const [gremio, setGremio] = useState<GremioModel[]>([]);
-  const categoriaRepository = new CategoriaRepository();
-  const [categoria, setCategoria] = useState<GremioModel[]>([]);
-  const carreraRepository = new CarreraRepository();
-  const [carrera, setCarrera] = useState<GremioModel[]>([]);
-  const presidenteRepository = new PresidenteRepository();
-  const [presidentes, setPresidentes] = useState<PresidenteModel[]>([]);
+  const [deportes, setDeporte] = useState([{ id: 0, nombre: 'Deporte' }]);
+  const [gremio, setGremio] = useState([{ id: 0, nombre: 'Gremio' }]);
+  const [categoria, setCategoria] = useState([{ id: 0, nombre: 'Categoría' }]);
+  const [carrera, setCarrera] = useState([{ id: 0, nombre: 'Carrera' }]);
+  const [presidentes, setPresidentes] = useState([{ id: 0, nombre: 'Presidente' }]);
 
   useEffect(() => {
     getAllGremios();
@@ -45,38 +30,34 @@ export const Gremios = () => {
   }, []);
 
   const getAllParametros = () => {
-    deportesRepository.getAllDeporte().then((res) => { if (res) { setDeporte(res);} });
-    gremioRepository.getAllGremio().then((res) => { if (res) { setGremio(res);} });
-    categoriaRepository.getAllCategoria().then((res) => { if (res) { setCategoria(res);} });
-    carreraRepository.getAllCarrera().then((res) => { if (res) { setCarrera(res);} });
-    presidenteRepository.getAllPresidentes().then((res) => { if (res) { setPresidentes(res);} });
+    setPresidentes([{ id: 1, nombre: 'Nombre Presidente' }]);
+    setDeporte([{ id: 1, nombre: 'Nombre Deporte' }]);
+    setGremio([{ id: 1, nombre: 'Nombre Gremio' }]);
+    setCategoria([{ id: 1, nombre: 'Nombre Categoría' }]);
+    setCarrera([{ id: 1, nombre: 'Nombre Carrera' }]);
   };
 
 
   const getAllGremios = () => {
-    gremiosRepository.getAllGremios().then((res) => {
-      if (res) {
-        setGremios(res);
-      }
-      console.log(res)
-    });
-    console.log(gremios)
+    setGremios([{ id: 0, nombreEquipo: 'Nombre equipo', presidente: 'Presidente', deporte: 'Deporte', gremio: 'Gremio', categoria: 'Categoria', carrera: 'Carrera' }]);
   };
+
+  const eliminarGremio = () =>{
+  }
   
 
   const tablaFinal = gremios
   .slice(pagesVisited, pagesVisited + itemsPerPage)
-  .map((item) => (
-    <tr key={item.nombreEquipo}>
+  .map((item, index) => (
+    <tr key={index}>
       <td>{item.nombreEquipo}</td>
       <td>{item.presidente}</td>
       <td>{item.deporte}</td>
       <td>{item.gremio}</td>
       <td>{item.categoria}</td>
       <td>{item.carrera}</td>
-  
       <td className="eliminar">
-      <button>❌</button>
+      <button onClick={() =>eliminarGremio()}>❌</button>
       </td>
     </tr>
   ));
@@ -86,43 +67,9 @@ const changePage = ({ selected }: { selected: number }) => {
   setPageNumber(selected);
 };
 
-
 const handleSubmit = async ( event : React.FormEvent ) => {
-  event.preventDefault(); // Evita que el formulario se envíe de forma predeterminada
-
-  const gremio = {
-    nombreEquipo: nombreEquipo,
-    idDeporte: idDeporte,
-    idGremio: idGremio,
-    idCategoria: idCategoria,
-    idCarrera: idCarrera,
-    idPresidente: idPresidente
-
-  };
-
-  if (!nombreEquipo) {
-    alert("El nombre del equipo no puede estar vacío");
-    return;
-  }
-  
-  if (idDeporte === 0 || idGremio === 0 || idCategoria === 0 || idCarrera === 0 || idPresidente === 0) {
-    alert("Debe seleccionar una opción válida para todos los campos");
-    return;
-  }
-  
-
-  console.log(gremio);
-  const exito = await gremiosRepository.RegistrarGremios(gremio);
-  
-  if (exito) {
-    alert('El gremio se ha registrado correctamente.');
-    getAllGremios();
-  } else {
-    alert('Error al registrar el gremio.');
-  }
+  event.preventDefault(); 
 };
-
-
 
   return (
     <div>
@@ -156,7 +103,6 @@ const handleSubmit = async ( event : React.FormEvent ) => {
               />
             </div>
 
-         
             <div className="container-inputs">
               <label htmlFor="idPresidente">
                 Presidente <span>(*)</span>{" "}
@@ -170,7 +116,7 @@ const handleSubmit = async ( event : React.FormEvent ) => {
               key={idPresidente} >
               <option value={0}>Seleccione una opción...</option>
             {presidentes.map((presidentes) => (
-              <option  value={presidentes.idUser}>{presidentes.nombre}</option>
+              <option  value={presidentes.id}>{presidentes.nombre}</option>
             ))}
               </select>
             </div>
@@ -188,7 +134,7 @@ const handleSubmit = async ( event : React.FormEvent ) => {
                 key={idDeporte} >
                   <option value={0}>Seleccione una opción...</option>
                 {deportes.map((deporte) => (
-                  <option  value={deporte.codigoCatalogo}>{deporte.nombre}</option>
+                  <option  value={deporte.id}>{deporte.nombre}</option>
                 ))}
 
               </select>
@@ -206,7 +152,7 @@ const handleSubmit = async ( event : React.FormEvent ) => {
                 key={idGremio} >
                   <option value={0}>Seleccione una opción...</option>
                 {gremio.map((gremio) => (
-                  <option  value={gremio.codigoCatalogo}>{gremio.nombre}</option>
+                  <option  value={gremio.id}>{gremio.nombre}</option>
                 ))}
               </select>
             </div>
@@ -224,7 +170,7 @@ const handleSubmit = async ( event : React.FormEvent ) => {
                 key={idCategoria} >
                   <option value={0}>Seleccione una opción...</option>
                 {categoria.map((categoria) => (
-                  <option  value={categoria.codigoCatalogo}>{categoria.nombre}</option>
+                  <option  value={categoria.id}>{categoria.nombre}</option>
                 ))}
               </select>
             </div>
@@ -242,7 +188,7 @@ const handleSubmit = async ( event : React.FormEvent ) => {
                 key={idCarrera} >
                   <option value={0}>Seleccione una opción...</option>
                 {carrera.map((carrera) => (
-                  <option  value={carrera.codigoCatalogo}>{carrera.nombre}</option>
+                  <option  value={carrera.id}>{carrera.nombre}</option>
                 ))}
               </select>
             </div>
@@ -277,19 +223,6 @@ const handleSubmit = async ( event : React.FormEvent ) => {
               </thead>
 
               <tbody>{tablaFinal}</tbody>
-              {/* <tbody>
-                <tr>
-                  <td> equipo.nombreEquipo </td>
-                  <td>equipo.presidente </td>
-                  <td> equipo.deporte </td>
-                  <td> equipo.gremio </td>
-                  <td> equipo.categoria </td>
-                  <td> equipo.carrera </td>
-                  <td className="eliminar">
-                    <button>❌</button>
-                  </td>
-                </tr>
-              </tbody> */}
             </table>
           </div>
           <Pagination pageCount={pageCount} onPageChange={changePage} />

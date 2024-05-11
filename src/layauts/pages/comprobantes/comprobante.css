@@ -1,0 +1,38 @@
+.url-doc-comprobantes a{
+  border: none;
+  background-color: transparent;
+  text-decoration: dashed;
+  color: rgb(0, 0, 113);
+}
+
+.btn-guardar{
+  border: none;
+  background-color: #1226ff;
+  text-decoration: dashed;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  font-weight: 600;
+  width: 200px;
+}
+
+.container-val-registro .btn-subir-comprobantes{
+  width: 200px;
+  height: 200px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  margin: 10px;
+}
+
+.container-val-registro{
+  display: flex;
+  flex-direction: column;
+  background-color: #f2f8ff;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+  border-radius: 10px;
+}
+
+.select-comprobantes{
+  border-radius: 100px;
+}
