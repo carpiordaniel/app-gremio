@@ -25,7 +25,7 @@ export const Menu = () => {
 
   const logout = () => {
     localStorage.removeItem('data');
-    window.location.href = '/login';
+    window.location.href = './login';
   }
   return (
     
