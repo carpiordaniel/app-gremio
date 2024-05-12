@@ -2,9 +2,8 @@ import { Link, useLocation  } from "react-router-dom";
 import './menu.css'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import LogoutIcon from '@mui/icons-material/Logout';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useEffect, useState } from "react";
+import { Perfil } from "./perfil";
 export interface dataResponse {
   email: string,
   nombre: string,
@@ -23,10 +22,6 @@ export const Menu = () => {
     return null; 
   }
 
-  const logout = () => {
-    localStorage.clear();
-    window.location.href = '/';
-  }
   return (
     
   <div className="contenido-menu">
@@ -67,26 +62,7 @@ export const Menu = () => {
       </ul>
     </div>
 
-
-    <div>
-      <div className="profile">
-        <div className="profile-container">
-        <hr />
-        <p> PERFIL </p>
-        <hr/>
-        </div>
-        <div className="profile-data">
-
-        <AccountCircleIcon/>
-        <div>
-          <p > {data?.nombre ? data?.nombre.toLocaleUpperCase(): ''}</p>
-          <p > {data?.rol ? data?.rol: ''}</p>
-          </div>
-        </div>
-      </div>
-      <button className="salir"  onClick={logout}><LogoutIcon/> Salir</button> 
-
-    </div>
+    <Perfil nombre={data?.nombre} rol={data?.rol}/>
     
     </div>
 
