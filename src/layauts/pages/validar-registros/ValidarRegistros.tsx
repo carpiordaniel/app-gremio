@@ -10,7 +10,6 @@ export const ValidarRegistros = () => {
   const [pageNumber, setPageNumber] = useState(0);
   const itemsPerPage = ITEM_PER_PAGE; 
   const pagesVisited = pageNumber * itemsPerPage;
-  const [showPopup, setShowPopup] = useState(false); 
   const [postulantes, setPostulantes] = useState([{ idPostulante: 0, nombres: '', apellidos: '', cedula: '', email: '', deporte: '', estadoPostulante: '' } ]);
 
 
@@ -41,8 +40,7 @@ export const ValidarRegistros = () => {
       <td>{item.cedula}</td>
       <td>{item.email}</td>
       <td>{item.deporte}</td>
-      <td><button onClick={ () => verDocumentos()}>🗃️</button></td>
-      {/* <td>{item.estadoPostulante}</td> */}
+  
       <td>
       <select 
         className={`estado-comprobante`}
@@ -72,14 +70,6 @@ export const ValidarRegistros = () => {
     setPageNumber(selected);
   };
 
-  function verDocumentos() {
-    setShowPopup(true);
-  }
-
-  const handleClosePopup = () => {
-    setShowPopup(false);
-  };
-
   
   return (
     <>
@@ -98,12 +88,7 @@ export const ValidarRegistros = () => {
       
     </div>
     <div className='container-val-registro'>
-      {showPopup && <section>
-            <span onClick={handleClosePopup}>❌</span>
-            <div className='pdf'>
-            {<PopupDocuments />}
-            </div>
-      </section>}
+      
 
 
     <div className="table-container">
@@ -123,7 +108,6 @@ export const ValidarRegistros = () => {
                 <th>Cedula</th>
                 <th>Emial</th>
                 <th>Deporte</th>
-                <th>Docs</th>
                 <th>Estado</th>
                
                 <th className="eliminar">Acciones</th>
