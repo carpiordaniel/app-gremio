@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import Pagination from '../../../componets/pagination/Pagination';
 import { ITEM_PER_PAGE } from '../../../core/urls/gremioUrl';
-import PopupDocuments from './PopupDocuments';
 import './ValidarRegistros.css'
 import SaveIcon from '@mui/icons-material/Save';
 
