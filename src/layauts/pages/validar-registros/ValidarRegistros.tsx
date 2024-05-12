@@ -97,6 +97,7 @@ export const ValidarRegistros = () => {
         <input type="text" placeholder="Buscar por nombre o usuario" />
       </div>
 
+
       <div className="separador">
         <div>
           <table>
